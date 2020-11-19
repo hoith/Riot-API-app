@@ -3,22 +3,30 @@ import pandas as pd
 
 # golbal variables
 val = input("Enter player name: ") 
-api_key = 'RGAPI-f4c22448-5b23-4303-b641-f9fb2cc78b7e'
+api_key = 'RGAPI-8c1b98e6-6f83-4f36-8b7e-57ff075ba5b7'
 watcher = LolWatcher(api_key)
 my_region = 'na1'
 
 me = watcher.summoner.by_name(my_region, val)
-#print(me)
 my_ranked_stats = watcher.league.by_summoner(my_region, me['id'])
-#print(my_ranked_stats)
-
 my_matches = watcher.match.matchlist_by_account(my_region, me['accountId'])
 
 last_match = my_matches['matches'][0]
 match_detail = watcher.match.by_id(my_region, last_match['gameId'])
+#match_type = 
+i =0
 participants = []
+participantIdentities=[]
+
+for row in participants:
+    print(match_detail['participantIdentities'][i]['player']['summonerName'])
+    participants.append(participants_row)
+
+    i= i +1
+
 for row in match_detail['participants']:
     participants_row = {}
+    match_detail['participantIdentities'][i]['player']['summonerName']
     participants_row['champion'] = row['championId']
     participants_row['spell1'] = row['spell1Id']
     participants_row['spell2'] = row['spell2Id']
@@ -33,6 +41,10 @@ for row in match_detail['participants']:
     participants_row['item0'] = row['stats']['item0']
     participants_row['item1'] = row['stats']['item1']
     participants.append(participants_row)
+
+
+
+#print(participantIdentities)
 df = pd.DataFrame(participants)
 latest = watcher.data_dragon.versions_for_region(my_region)['n']['champion']
 static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
@@ -41,7 +53,10 @@ for key in static_champ_list['data']:
     row = static_champ_list['data'][key]
     champ_dict[row['key']] = row['id']
 for row in participants:
-    print(str(row['champion']) + ' ' + champ_dict[str(row['champion'])])
     row['championName'] = champ_dict[str(row['champion'])]
+    print(match_detail['participantIdentities'][i]['player']['summonerName'])
+    i= i +1
 df = pd.DataFrame(participants)
-print(df)
+#print(df)
+#print(participants)
+#print(match_detail['participantIdentities'][0]['player']['summonerName'])
