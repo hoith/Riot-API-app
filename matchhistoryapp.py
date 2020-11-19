@@ -17,12 +17,15 @@ match_detail = watcher.match.by_id(my_region, last_match['gameId'])
 i =0
 participants = []
 participantIdentities=[]
+df = pd.DataFrame(participants)
+latest = watcher.data_dragon.versions_for_region(my_region)['n']['champion']
+static_champ_list = watcher.data_dragon.champions(latest, False, 'en_US')
+champ_dict = {}
+#for row in par:
+ #   print(match_detail['participantIdentities'][i]['player']['summonerName'])
+ # participants.append(participants_row)
 
-for row in participants:
-    print(match_detail['participantIdentities'][i]['player']['summonerName'])
-    participants.append(participants_row)
-
-    i= i +1
+   # i= i +1
 
 for row in match_detail['participants']:
     participants_row = {}
@@ -43,7 +46,8 @@ for row in match_detail['participants']:
     participants.append(participants_row)
 
 
-
+usernames=[]
+champnames=[]
 #print(participantIdentities)
 df = pd.DataFrame(participants)
 latest = watcher.data_dragon.versions_for_region(my_region)['n']['champion']
@@ -53,10 +57,19 @@ for key in static_champ_list['data']:
     row = static_champ_list['data'][key]
     champ_dict[row['key']] = row['id']
 for row in participants:
-    row['championName'] = champ_dict[str(row['champion'])]
-    print(match_detail['participantIdentities'][i]['player']['summonerName'])
-    i= i +1
+    test = champ_dict[str(row['champion'])]
+    champnames.append(test)
+
+for i in range(10):
+    dogs = match_detail['participantIdentities'][i]['player']['summonerName']
+    usernames.append(dogs)
+
 df = pd.DataFrame(participants)
-#print(df)
+#print(usernames)
+df.insert(loc=0, column='UserName', value=usernames)
+#df.insert(loc=1, column='Champion', value=champnames)
+
+#df['username'] = usernames
+print(df)
 #print(participants)
 #print(match_detail['participantIdentities'][0]['player']['summonerName'])
